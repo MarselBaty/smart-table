@@ -39,6 +39,7 @@ async function render(action) {
     let state = collectState(); // состояние полей из таблицы
     let query= {};
     query = applyPagination(query, state, action);
+    query = applyFiltering(query, state, action); // result заменяем на query
 
     // @todo: использование
     const { total, items } = await api.getRecords(query);
@@ -47,7 +48,10 @@ async function render(action) {
 }
 async function init() {
     const indexes = await api.getIndexes();
-    render();
+    updateIndexes(sampleTable.filter.elements, {
+        searchBySeller: indexes.sellers
+    });
+    render()
 }
 
 const sampleTable = initTable({
@@ -69,12 +73,12 @@ const {applyPagination, updatePagination} = initPagination(
         return el;
     }
 );
+const { applyFiltering, updateIndexes } = initFiltering(sampleTable.filter.elements);
 const applySorting = initSorting([
     sampleTable.header.elements.sortByDate,
     sampleTable.header.elements.sortByTotal
 ]);
 const appRoot = document.querySelector('#app');
 appRoot.appendChild(sampleTable.container);
-
 render();
 init();
