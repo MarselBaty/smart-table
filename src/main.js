@@ -14,8 +14,7 @@ import {initFiltering} from "./components/filtering.js";
 // @todo: подключение
 
 
-// Исходные данные используемые в render()
-const {data, ...indexes} = initData(sourceData);
+const api = initData(sourceData);
 
 /**
  * Сбор и обработка полей из таблицы
@@ -36,15 +35,19 @@ function collectState() {
  * Перерисовка состояния таблицы при любых изменениях
  * @param {HTMLButtonElement?} action
  */
-function render(action) {
+async function render(action) {
     let state = collectState(); // состояние полей из таблицы
-    let result = [...data]; // копируем для последующего изменения
+    let query= {};
+    query = applyPagination(query, state, action);
 
     // @todo: использование
-    result = applySorting(result, state, action);
-    result = applyPagination(result, state, action);
-    result = applyFiltering(result, state, action);
-    sampleTable.render(result);
+    const { total, items } = await api.getRecords(query);
+    updatePagination(total, query); // перерисовываем пагинатор
+    sampleTable.render(items);
+}
+async function init() {
+    const indexes = await api.getIndexes();
+    render();
 }
 
 const sampleTable = initTable({
@@ -55,10 +58,7 @@ const sampleTable = initTable({
 }, render);
 
 // @todo: инициализация
-const applyFiltering = initFiltering(sampleTable.filter.elements, {
-    searchBySeller: indexes.sellers
-});
-const applyPagination = initPagination(
+const {applyPagination, updatePagination} = initPagination(
     sampleTable.pagination.elements,
     (el, page, isCurrent) => {
         const input = el.querySelector('input');
@@ -77,3 +77,4 @@ const appRoot = document.querySelector('#app');
 appRoot.appendChild(sampleTable.container);
 
 render();
+init();
