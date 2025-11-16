@@ -35,17 +35,16 @@ export function initTable(settings, onAction) {
 
     const render = (data) => {
         // @todo: #1.1 — преобразовать данные в массив строк на основе шаблона rowTemplate
-        const nextRows = data.map(item => { // Создание строки
-            const row = cloneTemplate(rowTemplate); //Клонируем шаблон
+        const nextRows =data.map(item => {
+            const row= cloneTemplate(rowTemplate);
 
-            Object.keys(item).forEach(key => { // Проходимся по строкам, заполняя контентом
+            Object.keys(item).forEach(key => {
                 if (row.elements[key]) {
-                    row.elements[key].textContent = item[key];
+                        row.elements[key].textContent = item[key];
                 };
             });
             return row.container; 
         });
-
         root.elements.rows.replaceChildren(...nextRows);
     }
     return {...root, render};
