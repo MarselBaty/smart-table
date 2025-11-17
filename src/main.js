@@ -5,12 +5,11 @@ import {data as sourceData} from "./data/dataset_1.js";
 
 import {initData} from "./data.js";
 import {processFormData} from "./lib/utils.js";
-
 import {initTable} from "./components/table.js";
-import { initSearching } from "./components/searching.js";
-import {initPagination} from './components/pagination.js';
+import {initSearching} from "./components/searching.js";
 import {initSorting} from "./components/sorting.js";
 import {initFiltering} from "./components/filtering.js";
+import {initPagination} from './components/pagination.js';
 // @todo: подключение
 
 
