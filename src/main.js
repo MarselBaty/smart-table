@@ -12,7 +12,6 @@ import {initFiltering} from "./components/filtering.js";
 import {initPagination} from './components/pagination.js';
 // @todo: подключение
 
-
 const api = initData(sourceData);
 
 /**
@@ -27,7 +26,7 @@ function collectState() {
         ...state,
         rowsPerPage,
         page
-    };
+    }; 
 }
 
 /**
@@ -36,7 +35,7 @@ function collectState() {
  */
 async function render(action) {
     let state = collectState(); // состояние полей из таблицы
-    let query= {};
+    let query = {};
     query = applyPagination(query, state, action);
     query = applyFiltering(query, state, action); // result заменяем на query
     query = applySearching(query, state, action); // result заменяем на query
@@ -83,5 +82,4 @@ const applySearching = initSearching(
 )
 const appRoot = document.querySelector('#app');
 appRoot.appendChild(sampleTable.container);
-render();
 init();
